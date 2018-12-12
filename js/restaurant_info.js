@@ -22,7 +22,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: '<your MAPBOX API KEY HERE>',
+        mapboxToken: 'pk.eyJ1IjoidjNkYW50IiwiYSI6ImNqcGxhOTA3cjBjMDIzeHFvZGUzdHk0MDkifQ.XjRRlFYaAKMnnj6VG6CTdQ',
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -35,21 +35,21 @@ initMap = () => {
   });
 }  
  
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-} */
+//  window.initMap = () => {
+//   fetchRestaurantFromURL((error, restaurant) => {
+//     if (error) { // Got an error!
+//       console.error(error);
+//     } else {
+//       self.map = new google.maps.Map(document.getElementById('map'), {
+//         zoom: 16,
+//         center: restaurant.latlng,
+//         scrollwheel: false
+//       });
+//       fillBreadcrumb();
+//       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+//     }
+//   });
+// } 
 
 /**
  * Get current restaurant from page URL.
@@ -89,6 +89,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.setAttribute("alt", restaurant.name);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -128,6 +129,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.setAttribute("tabindex", 0);
   container.appendChild(title);
 
   if (!reviews) {
@@ -148,19 +150,28 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  const name = document.createElement('p');
-  name.innerHTML = review.name;
-  li.appendChild(name);
+  li.setAttribute("tabindex", 0);
+  const name = document.createElement('h3');
+  const title = document.createElement("div");
+  title.className = "review-title"
 
-  const date = document.createElement('p');
+  const date = document.createElement('span');
   date.innerHTML = review.date;
-  li.appendChild(date);
 
-  const rating = document.createElement('p');
+  name.innerHTML = review.name;
+  title.appendChild(name);
+  title.appendChild(date)
+
+  
+  li.appendChild(title);
+
+  const rating = document.createElement('span');
+  rating.className = "review-rating"
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.className = "review-comment"
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
